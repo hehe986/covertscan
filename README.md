@@ -20,12 +20,12 @@
 ---
 
 ```
-╔═════════════════════════════════════════════════════════════╗
-  ║  files/folders  ──▶  pattern match  ──▶  entropy analysis║
-  ║  git history    ──▶  .env parser    ──▶  false pos filter║
-  ║                            ↓                              ║
-  ║          CRITICAL  /  HIGH  /  MEDIUM  /  LOW             ║
-  ╚═══════════════════════════════════════════════════════════╝
+  ╔════════════════════════════════════════════════════════════╗
+  ║  files/folders  ──▶  pattern match  ──▶  entropy analysis ║
+  ║  git history    ──▶  .env parser    ──▶  false pos filter ║
+  ║                            ↓                               ║
+  ║          CRITICAL  /  HIGH  /  MEDIUM  /  LOW              ║
+  ╚════════════════════════════════════════════════════════════╝
 ```
 
 ## What is CovertScan?
