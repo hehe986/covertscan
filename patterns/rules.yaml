@@ -1,100 +1,286 @@
 rules:
-  - name: AWS Access Key
+  # ── AWS ──────────────────────────────────────────────────────────
+  - name: AWS Access Key ID
     severity: CRITICAL
     pattern: 'AKIA[0-9A-Z]{16}'
 
-  - name: AWS Secret Key
+  - name: AWS Secret Access Key
     severity: CRITICAL
     pattern: '(?i)aws(.{0,20})?[''"\s]([0-9a-zA-Z/+]{40})[''"\s]'
 
+  - name: AWS Session Token
+    severity: CRITICAL
+    pattern: '(?i)aws.{0,20}session.{0,20}[''"\s]([A-Za-z0-9/+=]{100,})[''"\s]'
+
+  # ── Google ───────────────────────────────────────────────────────
   - name: Google API Key
     severity: CRITICAL
     pattern: 'AIza[0-9A-Za-z\-_]{35}'
 
-  - name: Google OAuth
-    severity: CRITICAL
+  - name: Google OAuth Client ID
+    severity: HIGH
     pattern: '[0-9]+-[0-9A-Za-z_]{32}\.apps\.googleusercontent\.com'
 
-  - name: GitHub Token
+  - name: Google OAuth Token
+    severity: CRITICAL
+    pattern: 'ya29\.[0-9A-Za-z\-_]+'
+
+  - name: Google Service Account Key
+    severity: CRITICAL
+    pattern: '"type"\s*:\s*"service_account"'
+
+  # ── OpenAI ───────────────────────────────────────────────────────
+  - name: OpenAI API Key
+    severity: CRITICAL
+    pattern: 'sk-[a-zA-Z0-9]{20}T3BlbkFJ[a-zA-Z0-9]{20}'
+
+  - name: OpenAI API Key (new format 2024)
+    severity: CRITICAL
+    pattern: 'sk-proj-[a-zA-Z0-9\-_]{50,}'
+
+  - name: OpenAI Organization Key
+    severity: HIGH
+    pattern: 'org-[a-zA-Z0-9]{24}'
+
+  # ── Anthropic ────────────────────────────────────────────────────
+  - name: Anthropic API Key
+    severity: CRITICAL
+    pattern: 'sk-ant-[a-zA-Z0-9\-_]{90,}'
+
+  # ── GitHub ───────────────────────────────────────────────────────
+  - name: GitHub Personal Access Token (classic)
     severity: CRITICAL
     pattern: 'ghp_[0-9a-zA-Z]{36}'
 
-  - name: GitHub OAuth
+  - name: GitHub OAuth Token
     severity: CRITICAL
     pattern: 'gho_[0-9a-zA-Z]{36}'
 
-  - name: GitLab Token
+  - name: GitHub App Token
+    severity: CRITICAL
+    pattern: 'ghu_[0-9a-zA-Z]{36}'
+
+  - name: GitHub Actions Token
+    severity: CRITICAL
+    pattern: 'ghs_[0-9a-zA-Z]{36}'
+
+  - name: GitHub Refresh Token
+    severity: CRITICAL
+    pattern: 'ghr_[0-9a-zA-Z]{36}'
+
+  - name: GitHub Fine-grained Token (2024)
+    severity: CRITICAL
+    pattern: 'github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59}'
+
+  # ── GitLab ───────────────────────────────────────────────────────
+  - name: GitLab Personal Access Token
     severity: CRITICAL
     pattern: 'glpat-[0-9a-zA-Z\-]{20}'
 
-  - name: Slack Token
-    severity: CRITICAL
-    pattern: 'xox[baprs]-([0-9a-zA-Z]{10,48})'
+  - name: GitLab Deploy Token
+    severity: HIGH
+    pattern: 'gldt-[0-9a-zA-Z\-]{20}'
 
-  - name: Slack Webhook
+  - name: GitLab Runner Token
+    severity: HIGH
+    pattern: 'glrt-[0-9a-zA-Z\-]{20}'
+
+  # ── Slack ────────────────────────────────────────────────────────
+  - name: Slack Bot Token
+    severity: CRITICAL
+    pattern: 'xoxb-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{24}'
+
+  - name: Slack User Token
+    severity: CRITICAL
+    pattern: 'xoxp-[0-9]{10,13}-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{32}'
+
+  - name: Slack App Token
+    severity: CRITICAL
+    pattern: 'xapp-\d-[A-Z0-9]+-\d+-[a-zA-Z0-9]+'
+
+  - name: Slack Webhook URL
     severity: HIGH
     pattern: 'https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}'
 
-  - name: Private Key
+  # ── Stripe ───────────────────────────────────────────────────────
+  - name: Stripe Secret Key
     severity: CRITICAL
-    pattern: '-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----'
+    pattern: 'sk_(test|live)_[0-9a-zA-Z]{24,}'
 
-  - name: JWT Token
-    severity: HIGH
-    pattern: 'eyJ[a-zA-Z0-9]{10,}\.eyJ[a-zA-Z0-9]{10,}\.[a-zA-Z0-9\-_]+'
-
-  - name: Database URL (PostgreSQL)
-    severity: CRITICAL
-    pattern: 'postgres(ql)?://[^:]+:[^@]+@[^/]+/\S+'
-
-  - name: Database URL (MySQL)
-    severity: CRITICAL
-    pattern: 'mysql://[^:]+:[^@]+@[^/]+/\S+'
-
-  - name: Database URL (MongoDB)
-    severity: CRITICAL
-    pattern: 'mongodb(\+srv)?://[^:]+:[^@]+@\S+'
-
-  - name: Generic Password
-    severity: HIGH
-    pattern: '(?i)(password|passwd|pwd)\s*[:=]\s*[''"]?[^\s''"\n]{6,}[''"]?'
-
-  - name: Generic API Key
-    severity: HIGH
-    pattern: '(?i)(api_key|apikey|api_secret)\s*[:=]\s*[''"]?[^\s''"\n]{8,}[''"]?'
-
-  - name: Generic Secret
-    severity: HIGH
-    pattern: '(?i)(secret|secret_key|secret_token)\s*[:=]\s*[''"]?[^\s''"\n]{8,}[''"]?'
-
-  - name: Generic Token
+  - name: Stripe Publishable Key
     severity: MEDIUM
-    pattern: '(?i)(token|auth_token|access_token)\s*[:=]\s*[''"]?[^\s''"\n]{8,}[''"]?'
+    pattern: 'pk_(test|live)_[0-9a-zA-Z]{24,}'
 
-  - name: Private IP in Code
-    severity: LOW
-    pattern: '(?i)(host|server|endpoint)\s*[:=]\s*[''"]?(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)\d+\.\d+'
-
-  - name: Stripe API Key
+  - name: Stripe Restricted Key
     severity: CRITICAL
-    pattern: '(sk|pk)_(test|live)_[0-9a-zA-Z]{24,}'
+    pattern: 'rk_(test|live)_[0-9a-zA-Z]{24,}'
+
+  # ── Twilio ───────────────────────────────────────────────────────
+  - name: Twilio Account SID
+    severity: HIGH
+    pattern: 'AC[a-zA-Z0-9]{32}'
+
+  - name: Twilio Auth Token
+    severity: CRITICAL
+    pattern: '(?i)twilio.{0,20}[''"\s]([a-zA-Z0-9]{32})[''"\s]'
 
   - name: Twilio API Key
     severity: CRITICAL
     pattern: 'SK[0-9a-fA-F]{32}'
 
+  # ── SendGrid ─────────────────────────────────────────────────────
   - name: SendGrid API Key
     severity: CRITICAL
     pattern: 'SG\.[a-zA-Z0-9\-_]{22}\.[a-zA-Z0-9\-_]{43}'
 
+  # ── Mailgun ──────────────────────────────────────────────────────
   - name: Mailgun API Key
-    severity: HIGH
+    severity: CRITICAL
     pattern: 'key-[0-9a-zA-Z]{32}'
 
-  - name: Firebase URL
+  - name: Mailgun Private Key
+    severity: CRITICAL
+    pattern: 'mailgun.{0,20}[''"\s]([a-zA-Z0-9\-]{72})[''"\s]'
+
+  # ── Cloudflare ───────────────────────────────────────────────────
+  - name: Cloudflare API Key
+    severity: CRITICAL
+    pattern: '(?i)cloudflare.{0,20}[''"\s]([a-zA-Z0-9_\-]{37})[''"\s]'
+
+  - name: Cloudflare API Token
+    severity: CRITICAL
+    pattern: '[a-zA-Z0-9_\-]{40}(?=.*cloudflare)'
+
+  - name: Cloudflare Global API Key
+    severity: CRITICAL
+    pattern: '(?i)(cf_api_key|cloudflare_api_key)\s*[:=]\s*[''"]?([a-zA-Z0-9]{37})[''"]?'
+
+  # ── DigitalOcean ─────────────────────────────────────────────────
+  - name: DigitalOcean Personal Access Token
+    severity: CRITICAL
+    pattern: 'dop_v1_[a-zA-Z0-9]{64}'
+
+  - name: DigitalOcean OAuth Token
+    severity: CRITICAL
+    pattern: 'doo_v1_[a-zA-Z0-9]{64}'
+
+  - name: DigitalOcean Refresh Token
+    severity: CRITICAL
+    pattern: 'dor_v1_[a-zA-Z0-9]{64}'
+
+  # ── Hugging Face ─────────────────────────────────────────────────
+  - name: Hugging Face API Token
+    severity: CRITICAL
+    pattern: 'hf_[a-zA-Z0-9]{34,}'
+
+  - name: Hugging Face User Access Token (2024)
+    severity: CRITICAL
+    pattern: 'hf_[a-zA-Z]{2}[a-zA-Z0-9]{34}'
+
+  # ── Firebase ─────────────────────────────────────────────────────
+  - name: Firebase Database URL
     severity: MEDIUM
     pattern: 'https://[a-z0-9\-]+\.firebaseio\.com'
 
+  - name: Firebase Server Key
+    severity: CRITICAL
+    pattern: 'AAAA[a-zA-Z0-9_\-]{7}:[a-zA-Z0-9_\-]{140}'
+
+  # ── Database URLs ─────────────────────────────────────────────────
+  - name: PostgreSQL Connection String
+    severity: CRITICAL
+    pattern: 'postgres(ql)?://[^:]+:[^@]+@[^/\s]+/\S+'
+
+  - name: MySQL Connection String
+    severity: CRITICAL
+    pattern: 'mysql(2)?://[^:]+:[^@]+@[^/\s]+/\S+'
+
+  - name: MongoDB Connection String
+    severity: CRITICAL
+    pattern: 'mongodb(\+srv)?://[^:]+:[^@]+@\S+'
+
+  - name: Redis Connection String
+    severity: HIGH
+    pattern: 'redis://:([^@]+)@[^/\s]+'
+
+  - name: MSSQL Connection String
+    severity: CRITICAL
+    pattern: '(?i)(server|data source)=.{1,50};.{0,50}(password|pwd)=[^;]+'
+
+  # ── Private Keys ──────────────────────────────────────────────────
+  - name: RSA Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN RSA PRIVATE KEY-----'
+
+  - name: EC Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN EC PRIVATE KEY-----'
+
+  - name: DSA Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN DSA PRIVATE KEY-----'
+
+  - name: OpenSSH Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN OPENSSH PRIVATE KEY-----'
+
+  - name: PGP Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN PGP PRIVATE KEY BLOCK-----'
+
+  - name: PKCS8 Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN PRIVATE KEY-----'
+
+  # ── JWT ──────────────────────────────────────────────────────────
+  - name: JWT Token
+    severity: HIGH
+    pattern: 'eyJ[a-zA-Z0-9]{10,}\.eyJ[a-zA-Z0-9]{10,}\.[a-zA-Z0-9\-_]+'
+
+  # ── Heroku ───────────────────────────────────────────────────────
   - name: Heroku API Key
     severity: CRITICAL
-    pattern: '[hH]eroku.*[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+    pattern: '[hH]eroku.{0,20}[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+
+  # ── NPM ──────────────────────────────────────────────────────────
+  - name: NPM Access Token
+    severity: CRITICAL
+    pattern: 'npm_[a-zA-Z0-9]{36}'
+
+  # ── Shopify ──────────────────────────────────────────────────────
+  - name: Shopify Access Token
+    severity: CRITICAL
+    pattern: 'shpat_[a-fA-F0-9]{32}'
+
+  - name: Shopify Private App Token
+    severity: CRITICAL
+    pattern: 'shppa_[a-fA-F0-9]{32}'
+
+  # ── Generic Patterns ──────────────────────────────────────────────
+  - name: Generic Password in Code
+    severity: HIGH
+    pattern: '(?i)(password|passwd|pwd)\s*[:=]\s*[''"]([^''"\s]{8,})[''"]'
+
+  - name: Generic API Key in Code
+    severity: HIGH
+    pattern: '(?i)(api_key|apikey|api_secret|app_key)\s*[:=]\s*[''"]([^''"\s]{8,})[''"]'
+
+  - name: Generic Secret in Code
+    severity: HIGH
+    pattern: '(?i)(secret|secret_key|secret_token|app_secret)\s*[:=]\s*[''"]([^''"\s]{8,})[''"]'
+
+  - name: Generic Token in Code
+    severity: MEDIUM
+    pattern: '(?i)(token|auth_token|access_token|bearer_token)\s*[:=]\s*[''"]([^''"\s]{8,})[''"]'
+
+  - name: Authorization Bearer Header
+    severity: HIGH
+    pattern: '(?i)authorization\s*[:=]\s*[''"]?bearer\s+([a-zA-Z0-9\-_\.]{20,})'
+
+  - name: Basic Auth in URL
+    severity: HIGH
+    pattern: 'https?://[^:]+:[^@]{6,}@'
+
+  - name: Private IP Hardcoded
+    severity: LOW
+    pattern: '(?i)(host|server|endpoint|db_host)\s*[:=]\s*[''"]?(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)\d+\.\d+'
