@@ -1,0 +1,100 @@
+rules:
+  - name: AWS Access Key
+    severity: CRITICAL
+    pattern: 'AKIA[0-9A-Z]{16}'
+
+  - name: AWS Secret Key
+    severity: CRITICAL
+    pattern: '(?i)aws(.{0,20})?[''"\s]([0-9a-zA-Z/+]{40})[''"\s]'
+
+  - name: Google API Key
+    severity: CRITICAL
+    pattern: 'AIza[0-9A-Za-z\-_]{35}'
+
+  - name: Google OAuth
+    severity: CRITICAL
+    pattern: '[0-9]+-[0-9A-Za-z_]{32}\.apps\.googleusercontent\.com'
+
+  - name: GitHub Token
+    severity: CRITICAL
+    pattern: 'ghp_[0-9a-zA-Z]{36}'
+
+  - name: GitHub OAuth
+    severity: CRITICAL
+    pattern: 'gho_[0-9a-zA-Z]{36}'
+
+  - name: GitLab Token
+    severity: CRITICAL
+    pattern: 'glpat-[0-9a-zA-Z\-]{20}'
+
+  - name: Slack Token
+    severity: CRITICAL
+    pattern: 'xox[baprs]-([0-9a-zA-Z]{10,48})'
+
+  - name: Slack Webhook
+    severity: HIGH
+    pattern: 'https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}'
+
+  - name: Private Key
+    severity: CRITICAL
+    pattern: '-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----'
+
+  - name: JWT Token
+    severity: HIGH
+    pattern: 'eyJ[a-zA-Z0-9]{10,}\.eyJ[a-zA-Z0-9]{10,}\.[a-zA-Z0-9\-_]+'
+
+  - name: Database URL (PostgreSQL)
+    severity: CRITICAL
+    pattern: 'postgres(ql)?://[^:]+:[^@]+@[^/]+/\S+'
+
+  - name: Database URL (MySQL)
+    severity: CRITICAL
+    pattern: 'mysql://[^:]+:[^@]+@[^/]+/\S+'
+
+  - name: Database URL (MongoDB)
+    severity: CRITICAL
+    pattern: 'mongodb(\+srv)?://[^:]+:[^@]+@\S+'
+
+  - name: Generic Password
+    severity: HIGH
+    pattern: '(?i)(password|passwd|pwd)\s*[:=]\s*[''"]?[^\s''"\n]{6,}[''"]?'
+
+  - name: Generic API Key
+    severity: HIGH
+    pattern: '(?i)(api_key|apikey|api_secret)\s*[:=]\s*[''"]?[^\s''"\n]{8,}[''"]?'
+
+  - name: Generic Secret
+    severity: HIGH
+    pattern: '(?i)(secret|secret_key|secret_token)\s*[:=]\s*[''"]?[^\s''"\n]{8,}[''"]?'
+
+  - name: Generic Token
+    severity: MEDIUM
+    pattern: '(?i)(token|auth_token|access_token)\s*[:=]\s*[''"]?[^\s''"\n]{8,}[''"]?'
+
+  - name: Private IP in Code
+    severity: LOW
+    pattern: '(?i)(host|server|endpoint)\s*[:=]\s*[''"]?(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)\d+\.\d+'
+
+  - name: Stripe API Key
+    severity: CRITICAL
+    pattern: '(sk|pk)_(test|live)_[0-9a-zA-Z]{24,}'
+
+  - name: Twilio API Key
+    severity: CRITICAL
+    pattern: 'SK[0-9a-fA-F]{32}'
+
+  - name: SendGrid API Key
+    severity: CRITICAL
+    pattern: 'SG\.[a-zA-Z0-9\-_]{22}\.[a-zA-Z0-9\-_]{43}'
+
+  - name: Mailgun API Key
+    severity: HIGH
+    pattern: 'key-[0-9a-zA-Z]{32}'
+
+  - name: Firebase URL
+    severity: MEDIUM
+    pattern: 'https://[a-z0-9\-]+\.firebaseio\.com'
+
+  - name: Heroku API Key
+    severity: CRITICAL
+    pattern: '[hH]eroku.*[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
