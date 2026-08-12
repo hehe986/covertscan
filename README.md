@@ -1,22 +1,75 @@
-# CovertScan 👻
-> Hardcoded Secrets & Credential Scanner
+```
+   ██████╗ ██████╗ ██╗   ██╗███████╗██████╗ ████████╗███████╗ ██████╗ █████╗ ███╗   ██╗
+  ██╔════╝██╔═══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔════╝██╔══██╗████╗  ██║
+  ██║     ██║   ██║██║   ██║█████╗  ██████╔╝   ██║   ███████╗██║     ███████║██╔██╗ ██║
+  ██║     ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║   ╚════██║██║     ██╔══██║██║╚██╗██║
+  ╚██████╗╚██████╔╝ ╚████╔╝ ███████╗██║  ██║   ██║   ███████║╚██████╗██║  ██║██║ ╚████║
+   ╚═════╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝
+```
 
-CovertScan scans files, folders, and git history for hardcoded secrets, credentials, and sensitive data left in source code.
+<h1 align="center">CovertScan 👻</h1>
+<p align="center">Scan your codebase for hardcoded secrets before attackers do.</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.8+-blue?style=flat-square&logo=python">
+  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20Kali-informational?style=flat-square">
+  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square">
+  <img src="https://img.shields.io/badge/rules-66%2B-red?style=flat-square">
+  <img src="https://img.shields.io/badge/version-2.0.0-orange?style=flat-square">
+</p>
+
+---
+
+```
+  ╔═══════════════════════════════════════════════════════════╗
+  ║  files/folders  →  pattern match  →  entropy analysis    ║
+  ║  git history    →  .env parser    →  false pos filter     ║
+  ║                         ↓                                ║
+  ║            CRITICAL / HIGH / MEDIUM / LOW                 ║
+  ╚═══════════════════════════════════════════════════════════╝
+```
+
+## What is CovertScan?
+
+CovertScan scans your source code, folders, and git history for **hardcoded secrets** —
+API keys, tokens, passwords, private keys, and database credentials that were accidentally
+left in code and could be exploited if pushed to a public repository.
 
 ## Features
-- Pattern matching (30+ rules): AWS, GitHub, JWT, DB URLs, API keys, dll
-- Entropy analysis — detect unknown secrets by randomness level
-- Git history scan — cek commit lama yang sudah dihapus sekalipun
-- Severity rating: CRITICAL / HIGH / MEDIUM / LOW
-- Export: JSON / CSV
+
+| Feature | Description |
+|---------|-------------|
+| 🔍 Pattern Matching | 66+ rules — AWS, OpenAI, GitHub, Stripe, Cloudflare, Anthropic, dll |
+| 🎲 Entropy Analysis | Detect unknown secrets by randomness level (Shannon entropy) |
+| 📜 Git History Scan | Scan old commits — even deleted secrets are traceable |
+| 🌿 .env File Parser | Dedicated parser for `KEY=VALUE` format |
+| 🚫 False Positive Filter | Skip `changeme`, `example`, `${VAR}`, `{{VAR}}`, `<KEY>`, dll |
+| 📊 Severity Rating | CRITICAL / HIGH / MEDIUM / LOW |
+| 🔎 Context Lines | Show surrounding lines around each finding |
+| 📁 Export | JSON / CSV |
+
+## Supported Secret Types
+
+```
+  AWS · Google · OpenAI · Anthropic · GitHub · GitLab
+  Slack · Stripe · Twilio · SendGrid · Mailgun · Cloudflare
+  DigitalOcean · HuggingFace · Firebase · Heroku · NPM
+  Shopify · JWT · RSA/EC/DSA/OpenSSH Private Keys
+  PostgreSQL · MySQL · MongoDB · Redis · MSSQL
+  Generic: password · api_key · secret · token · bearer
+```
 
 ## Install
 
 ```bash
-git clone https://github.com/H1lm1exe/covertscan
+git clone https://github.com/hehe986/covertscan.git
 cd covertscan
-pip install -r requirements.txt
+bash install.sh
 ```
+
+> **Kali Linux / Debian:**
+> ```bash
+> pip install -r requirements.txt --break-system-packages
+> ```
 
 ## Usage
 
@@ -33,26 +86,44 @@ python covertscan.py --path /project/myapp --entropy
 # Scan + git history
 python covertscan.py --path /project/myapp --git-history
 
-# Export hasil ke JSON
+# Show context lines around findings
+python covertscan.py --path /project/myapp --context
+
+# Filter only CRITICAL findings
+python covertscan.py --path /project/myapp --severity CRITICAL
+
+# Export to JSON
 python covertscan.py --path /project/myapp --output json
 
-# Export hasil ke CSV
-python covertscan.py --path /project/myapp --output csv
-
 # Full scan
-python covertscan.py --path /project/myapp --entropy --git-history --output json
+python covertscan.py --path /project/myapp --entropy --git-history --context --output json
 ```
 
 ## Output Example
 
 ```
+   ██████╗ ██████╗ ██╗   ██╗███████╗██████╗ ████████╗███████╗ ██████╗ █████╗ ███╗   ██╗
+  ...
+
+  CovertScan - Hardcoded Secrets & Credential Scanner
+  Author  : H1lm1.exe
+  Version : 2.0.0
+  ────────────────────────────────────────────────────────────
+
+  [*] Loaded 66 detection rules
+  [*] Scanning  : /project/myapp
+
   [CRITICAL]   /src/config.py  line 12
-               Rule  : AWS Access Key
+               Rule  : AWS Access Key ID
                Value : AKIA****XXXX
 
-  [HIGH]       /src/db.py  line 34
-               Rule  : Database URL (PostgreSQL)
+  [CRITICAL]   /src/db.py  line 34
+               Rule  : PostgreSQL Connection String
                Value : post****st
+
+  [HIGH]       /src/auth.py  line 8
+               Rule  : Generic API Key in Code
+               Value : API_****key"
 
   ────────────────────────────────────────────────────────────
   SUMMARY
@@ -63,8 +134,17 @@ python covertscan.py --path /project/myapp --entropy --git-history --output json
   LOW      : 0
   TOTAL    : 3
   TIME     : 0.42s
+  ────────────────────────────────────────────────────────────
 ```
 
 ## Author
-- **H1lm1.exe**
-- Informatics Engineering — Universitas Amikom Yogyakarta
+
+```
+  ╔══════════════════════════════════╗
+  ║  H1lm1.exe                       ║
+  ║  Informatics Engineering         ║
+  ║  Universitas Amikom Yogyakarta   ║
+  ╚══════════════════════════════════╝
+```
+
+> ⚠️ For educational and authorized security testing purposes only.
